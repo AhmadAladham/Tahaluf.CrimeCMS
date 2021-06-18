@@ -61,7 +61,8 @@ namespace CrimeFile.API
                     .WithHeaders("Authorization")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .AllowAnyOrigin();
+                    .AllowAnyOrigin()
+                    .WithExposedHeaders("x-pagination");
 
                 });
                 
