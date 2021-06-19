@@ -108,15 +108,37 @@ namespace CrimeFile.Infra.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<Crime>> Search(CrimeDto crimeDto)
+        public async Task<PagedList<AllCrimeDTO>> Search(CrimeDto crimeDto)
         {
             queryParameters.Add("@CrimeTtile", crimeDto.CrimeTtile, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@DateFrom", crimeDto.DateFrom, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@DateTo", crimeDto.DateTo, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeCategoryName", crimeDto.CrimeCategoryName, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@CrimeCategoryId", crimeDto.CrimeCategyId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@StationId", crimeDto.StationId, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@Location", crimeDto.Location, dbType: DbType.String, direction: ParameterDirection.Input);
-            var result = await _dbContext.Connection.QueryAsync<Crime>("SearchCrimes", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
-            return (IEnumerable<Crime>)result;
+            queryParameters.Add("@PageNumber", crimeDto.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@RowsOfPage", crimeDto.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@TotalCount", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+            var result = await _dbContext.Connection.QueryAsync<AllCrimeDTO, int, Tuple<AllCrimeDTO, int>>("SearchCrimes"
+               , (crimeDTO, tCount) =>
+               {
+                   Tuple<AllCrimeDTO, int> t = new Tuple<AllCrimeDTO, int>(crimeDTO, tCount);
+                   return t;
+               }
+               , splitOn: "TotalCount"
+               , transaction: _dbContext.Transaction
+               , param: queryParameters
+               , commandType: CommandType.StoredProcedure);
+
+            var crimes = new List<AllCrimeDTO>();
+            int totalCount = 0;
+            if(result.Count()>0) totalCount = result.FirstOrDefault().Item2;
+            foreach (var item in result)
+            {
+                crimes.Add(item.Item1);
+            }
+            var crimesPagedList = new PagedList<AllCrimeDTO>(crimes, totalCount, crimeDto.PageNumber, crimeDto.PageSize);
+            return crimesPagedList;
         }
     }
 }

@@ -16,6 +16,6 @@ namespace CrimeFile.Core.Services
         Task<ServiceResult<int>> Create(Crime crime);
         Task<ServiceResult<int>> Edit(Crime crime);
         Task<ServiceResult<int>> Delete(int id);
-        Task<ServiceResult<IEnumerable<Crime>>> Search(CrimeDto crimeDto);
+        Task<ServiceResult<PagedList<AllCrimeDTO>>> Search(CrimeDto crimeDto);
     }
 }

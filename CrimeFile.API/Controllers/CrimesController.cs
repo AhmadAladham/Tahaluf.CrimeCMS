@@ -86,8 +86,18 @@ namespace CrimeFile.API.Controllers
         [Route("CrimeSearch")]
         public async Task<IActionResult> Search([FromBody] CrimeDto crime)
         {
-            var result = await _crimeService.Search(crime);
-            return Ok(result);
+            var crimes = await _crimeService.Search(crime);
+            var metadata = new
+            {
+                crimes.Data.TotalCount,
+                crimes.Data.PageSize,
+                crimes.Data.CurrentPage,
+                crimes.Data.TotalPages,
+                crimes.Data.HasNext,
+                crimes.Data.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            return Ok(crimes);
         }
     }
 }

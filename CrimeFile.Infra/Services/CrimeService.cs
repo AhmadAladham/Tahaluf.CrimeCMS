@@ -118,11 +118,11 @@ namespace CrimeFile.Infra.Services
             });
         }
 
-        public async Task<ServiceResult<IEnumerable<Crime>>> Search(CrimeDto crimeDto)
+        public async Task<ServiceResult<PagedList<AllCrimeDTO>>> Search(CrimeDto crimeDto)
         {
             return await ExecuteAsync(async x =>
             {
-                var serviceResult = new ServiceResult<IEnumerable<Crime>>(ResultCode.BadRequest);
+                var serviceResult = new ServiceResult<PagedList<AllCrimeDTO>>(ResultCode.BadRequest);
                 try
                 {
                     var result = await _crimeRepository.Search(crimeDto);
