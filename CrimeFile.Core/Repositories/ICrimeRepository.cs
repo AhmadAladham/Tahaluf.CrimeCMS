@@ -9,6 +9,8 @@ namespace CrimeFile.Core.Repositories
 {
     public interface ICrimeRepository : IRepository<Crime>
     {
+
         Task<IEnumerable<Crime>> Search(CrimeDto crimeDto);
+        Task<PagedList<AllCrimeDTO>> GetAllPaged(CrimeParameters crimeParameters);
     }
 }

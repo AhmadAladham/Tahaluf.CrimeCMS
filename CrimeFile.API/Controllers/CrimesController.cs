@@ -1,8 +1,10 @@
 ﻿using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace CrimeFile.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class CrimesController : ControllerBase
     {
         private readonly ICrimeService _crimeService;
@@ -24,11 +27,23 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<Crime>), StatusCodes.Status200OK)]
         //[Permission(Permissions.List)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] CrimeParameters crimeParameters)
         {
-            var result = await _crimeService.GetAll();
-            return Ok(result);
+            var crimes = await _crimeService.GetAllPaged(crimeParameters);
+            var metadata = new
+            {
+                crimes.Data.TotalCount,
+                crimes.Data.PageSize,
+                crimes.Data.CurrentPage,
+                crimes.Data.TotalPages,
+                crimes.Data.HasNext,
+                crimes.Data.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(crimes);
         }
+
 
         [HttpGet]
         [ProducesResponseType(typeof(Crime), StatusCodes.Status200OK)]
@@ -37,7 +52,7 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> GetStationById(int id)
         {
             var result = await _crimeService.GetById(id);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -46,7 +61,7 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> Create([FromBody] Crime crime)
         {
             var result = await _crimeService.Create(crime);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -55,14 +70,14 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> Edit([FromBody] Crime crime)
         {
             var result = await _crimeService.Edit(crime);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _crimeService.Delete(id);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpPost]

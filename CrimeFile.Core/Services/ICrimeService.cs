@@ -12,7 +12,7 @@ namespace CrimeFile.Core.Services
     {
 
         Task<ServiceResult<Crime>> GetById(int id);
-        Task<ServiceResult<List<Crime>>> GetAll();
+        Task<ServiceResult<PagedList<AllCrimeDTO>>> GetAllPaged(CrimeParameters crimeParameters);
         Task<ServiceResult<int>> Create(Crime crime);
         Task<ServiceResult<int>> Edit(Crime crime);
         Task<ServiceResult<int>> Delete(int id);

@@ -6,6 +6,7 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,6 +33,35 @@ namespace CrimeFile.Infra.Repositories
         public async Task<List<Crime>> GetAll()
         {
             return new List<Crime>();
+        }
+
+        public async Task<PagedList<AllCrimeDTO>> GetAllPaged(CrimeParameters crimeParameters)
+        {
+            queryParameters.Add("@SortingCol", crimeParameters.SortingColumn, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@SortType", crimeParameters.SortType, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@PageNumber", crimeParameters.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@RowsOfPage", crimeParameters.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@TotalCount", null, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            var result = await _dbContext.Connection.QueryAsync<AllCrimeDTO, int, Tuple<AllCrimeDTO, int>>("GetAllCrimes"
+                , (crimeDTO, tCount) =>
+                {
+                    Tuple<AllCrimeDTO, int> t = new Tuple<AllCrimeDTO, int>(crimeDTO, tCount);
+                    return t;
+                }
+                , splitOn: "TotalCount"
+                , transaction: _dbContext.Transaction
+                , param: queryParameters
+                , commandType: CommandType.StoredProcedure);
+
+            var crimes = new List<AllCrimeDTO>();
+            int totalCount = result.FirstOrDefault().Item2;
+            foreach (var item in result)
+            {
+                crimes.Add(item.Item1);
+            }
+            var crimesPagedList = new PagedList<AllCrimeDTO>(crimes, totalCount, crimeParameters.PageNumber, crimeParameters.PageSize);
+            return crimesPagedList;
         }
 
         public async Task<int> Create(Crime crime)

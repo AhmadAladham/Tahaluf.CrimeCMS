@@ -1,6 +1,7 @@
 ﻿using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,15 +11,18 @@ namespace CrimeFile.API.Controllers
 {
     [Route("api/[controller]")]// /[action]
     [ApiController]
+    [EnableCors]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        
 
-        public UsersController(IUserService userService, IEmailService emailService)
+        public UsersController(IUserService userService, IEmailService emailService )
         {
             _userService = userService;
             _emailService = emailService;
+           
         }
 
         [HttpGet]
@@ -36,6 +40,8 @@ namespace CrimeFile.API.Controllers
                 users.Data.HasPrevious
             };
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            
             return Ok(users);
         }
 
