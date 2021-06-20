@@ -11,8 +11,10 @@ namespace CrimeFile.Core.DTOs
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
         public string Location { get; set; }
-        public int? CrimeCategyId { get; set; }
+        public int? CrimeCategoryId { get; set; }
         public int? StationId { get; set; }
+        public string SortingColumn { get; set; } = "Title";
+        public string SortType { get; set; } = "ASC";
 
     }
 }

@@ -113,12 +113,14 @@ namespace CrimeFile.Infra.Repositories
             queryParameters.Add("@CrimeTtile", crimeDto.CrimeTtile, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@DateFrom", crimeDto.DateFrom, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@DateTo", crimeDto.DateTo, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeCategoryId", crimeDto.CrimeCategyId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@CrimeCategoryId", crimeDto.CrimeCategoryId, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@StationId", crimeDto.StationId, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@Location", crimeDto.Location, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@PageNumber", crimeDto.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@RowsOfPage", crimeDto.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@TotalCount", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+            queryParameters.Add("@SortingCol", crimeDto.SortingColumn, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@SortType", crimeDto.SortType, dbType: DbType.String, direction: ParameterDirection.Input);
             var result = await _dbContext.Connection.QueryAsync<AllCrimeDTO, int, Tuple<AllCrimeDTO, int>>("SearchCrimes"
                , (crimeDTO, tCount) =>
                {
