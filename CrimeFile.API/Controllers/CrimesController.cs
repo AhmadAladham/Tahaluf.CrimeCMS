@@ -87,6 +87,8 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> Search([FromBody] CrimeDto crime)
         {
             var crimes = await _crimeService.Search(crime);
+            if(crimes.Data != null)
+            {
                 var metadata = new
                 {
                     crimes.Data.TotalCount,
@@ -96,8 +98,10 @@ namespace CrimeFile.API.Controllers
                     crimes.Data.HasNext,
                     crimes.Data.HasPrevious
                 };
-            
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            }
+                
             return Ok(crimes);
         }
     }

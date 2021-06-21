@@ -108,8 +108,7 @@ namespace CrimeFile.Infra.Repositories
             return result;
         }
 
-        public async Task<PagedList<AllCrimeDTO>> Search(CrimeDto crimeDto)
-        {
+        public async Task<PagedList<AllCrimeDTO>> Search(CrimeDto crimeDto){
             queryParameters.Add("@CrimeTtile", crimeDto.CrimeTtile, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@DateFrom", crimeDto.DateFrom, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@DateTo", crimeDto.DateTo, dbType: DbType.DateTime, direction: ParameterDirection.Input);
