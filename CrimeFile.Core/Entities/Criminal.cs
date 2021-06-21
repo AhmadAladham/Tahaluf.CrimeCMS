@@ -7,6 +7,7 @@ namespace CrimeFile.Core.Entities
     public class Criminal
     {
         public int CriminalId { get; set; }
+        public string CriminalNationalNumber { get; set; }
         public string CriminalFirstName { get; set; }
         public string CriminalLastName { get; set; }
         public decimal Height { get; set; }

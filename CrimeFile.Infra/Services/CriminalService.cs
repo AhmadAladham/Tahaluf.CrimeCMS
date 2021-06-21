@@ -59,6 +59,26 @@ namespace CrimeFile.Infra.Services
             });
         }
 
+        public async Task<ServiceResult<Criminal>> GetByNationalNumber(string nationalNumber)
+        {
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<Criminal>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _criminalRepository.GetByNationalNumber(nationalNumber);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    // _ = ex.Message;
+                }
+
+                return serviceResult;
+            });
+        }
+
         public async Task<ServiceResult<int>> Create(Criminal criminal)
         {
             return await ExecuteAsync(async x =>

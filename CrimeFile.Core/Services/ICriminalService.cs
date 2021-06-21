@@ -11,6 +11,7 @@ namespace CrimeFile.Core.Services
     public interface ICriminalService : IBaseService
     {
         Task<ServiceResult<Criminal>> GetById(int id);
+        Task<ServiceResult<Criminal>> GetByNationalNumber(string nationalNumber);
         Task<ServiceResult<List<Criminal>>> GetAll();
         Task<ServiceResult<int>> Create(Criminal criminal);
         Task<ServiceResult<int>> Edit(Criminal criminal);

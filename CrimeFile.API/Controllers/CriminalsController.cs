@@ -1,6 +1,7 @@
 ﻿using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace CrimeFile.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class CriminalsController : ControllerBase
     {
         private readonly ICriminalService _criminalService;
@@ -27,17 +29,27 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _criminalService.GetAll();
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Station), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Criminal), StatusCodes.Status200OK)]
         [Route("{id}")]
         //[Permission(Permissions.List)]
-        public async Task<IActionResult> GetStationById(int id)
+        public async Task<IActionResult> GetCriminalById(int id)
         {
             var result = await _criminalService.GetById(id);
-            return Ok(result.Data);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(Criminal), StatusCodes.Status200OK)]
+        [Route("NationalNumber/{nationalNumber}")]
+        //[Permission(Permissions.List)]
+        public async Task<IActionResult> GetCriminalByNationalNumber(string nationalNumber)
+        {
+            var result = await _criminalService.GetByNationalNumber(nationalNumber);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -46,7 +58,7 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> Create([FromBody] Criminal criminal)
         {
             var result = await _criminalService.Create(criminal);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -55,14 +67,14 @@ namespace CrimeFile.API.Controllers
         public async Task<IActionResult> Edit([FromBody] Criminal criminal)
         {
             var result = await _criminalService.Edit(criminal);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _criminalService.Delete(id);
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [HttpPost]
