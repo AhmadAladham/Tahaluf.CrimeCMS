@@ -53,14 +53,23 @@ namespace CrimeFile.Infra.Repositories
                 , transaction: _dbContext.Transaction
                 , param: queryParameters
                 , commandType: CommandType.StoredProcedure);
-
+            PagedList<AllCrimeDTO> crimesPagedList;
             var crimes = new List<AllCrimeDTO>();
-            int totalCount = result.FirstOrDefault().Item2;
-            foreach (var item in result)
+            if(result.Count() != 0)
             {
-                crimes.Add(item.Item1);
+                int totalCount = result.FirstOrDefault().Item2;
+                foreach (var item in result)
+                {
+                    crimes.Add(item.Item1);
+                }
+                crimesPagedList = new PagedList<AllCrimeDTO>(crimes, totalCount, crimeParameters.PageNumber, crimeParameters.PageSize);
             }
-            var crimesPagedList = new PagedList<AllCrimeDTO>(crimes, totalCount, crimeParameters.PageNumber, crimeParameters.PageSize);
+            else
+            {
+                crimesPagedList = new PagedList<AllCrimeDTO>(crimes, 0, crimeParameters.PageNumber, crimeParameters.PageSize);
+            }
+            
+            
             return crimesPagedList;
         }
 
