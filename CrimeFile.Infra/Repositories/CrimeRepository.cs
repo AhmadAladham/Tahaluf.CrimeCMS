@@ -76,7 +76,7 @@ namespace CrimeFile.Infra.Repositories
         public async Task<int> Create(Crime crime)
         {
             queryParameters.Add("@CrimeTtile", crime.CrimeTtile, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeEntryDate", crime.CrimeEntryDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+            queryParameters.Add("@CrimeEntryDate", DateTime.Now, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@CrimeDate", crime.CrimeDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@CloseDate", crime.CloseDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@IsClosed", crime.IsClosed, dbType: DbType.Boolean, direction: ParameterDirection.Input);

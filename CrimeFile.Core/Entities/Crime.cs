@@ -9,7 +9,7 @@ namespace CrimeFile.Core.Entities
         public int CrimeId { get; set; }
         public int StationId { get; set; }
         public int CrimeCategoryId { get; set; }
-        public int CriminalId { get; set; }
+        public int? CriminalId { get; set; }
         public string CrimeTtile { get; set; }
         public DateTime CrimeEntryDate { get; set; }
         public DateTime CrimeDate { get; set; }
