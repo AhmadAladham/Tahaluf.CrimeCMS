@@ -38,11 +38,11 @@ namespace CrimeFile.Infra.Services
             });
         }
 
-        public async Task<ServiceResult<Crime>> GetById(int id)
+        public async Task<ServiceResult<AllCrimeDTO>> GetById(int id)
         {
             return await ExecuteAsync(async x =>
             {
-                var serviceResult = new ServiceResult<Crime>(ResultCode.BadRequest);
+                var serviceResult = new ServiceResult<AllCrimeDTO>(ResultCode.BadRequest);
                 try
                 {
                     var result = await _crimeRepository.GetById(id);

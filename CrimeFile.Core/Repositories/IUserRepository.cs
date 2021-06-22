@@ -9,6 +9,7 @@ namespace CrimeFile.Core.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
+        Task<User> GetById(int id);
         Task<RegisterResultDTO> Register(RegisterDTO registerDTO);
         Task<string> VerifyEmail(EmailVerificationDTO emailVerification);
         Task<string> SignIn(SignInDTO signInDTO);

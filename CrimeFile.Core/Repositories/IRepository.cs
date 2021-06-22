@@ -7,7 +7,6 @@ namespace CrimeFile.Core.Repositories
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> GetById(int id);
         Task<List<T>> GetAll();
         Task<int> Create(T entity);
         Task<int> Edit(T entity);

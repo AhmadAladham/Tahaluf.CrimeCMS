@@ -9,7 +9,7 @@ namespace CrimeFile.Core.Repositories
 {
     public interface ICrimeRepository : IRepository<Crime>
     {
-
+        Task<AllCrimeDTO> GetById(int id);
         Task<PagedList<AllCrimeDTO>> Search(CrimeDto crimeDto);
         Task<PagedList<AllCrimeDTO>> GetAllPaged(CrimeParameters crimeParameters);
     }

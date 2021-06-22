@@ -23,10 +23,10 @@ namespace CrimeFile.Infra.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Crime> GetById(int id)
+        public async Task<AllCrimeDTO> GetById(int id)
         {
             queryParameters.Add("@CrimeId", id, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            var result = await _dbContext.Connection.QueryFirstOrDefaultAsync<Crime>("GetCrimeById", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
+            var result = await _dbContext.Connection.QueryFirstOrDefaultAsync<AllCrimeDTO>("GetCrimeById", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
 
