@@ -17,8 +17,6 @@ namespace CrimeFile.Infra.Services
 {
     public class UserService : BaseService, IUserService
     {
-
-
         private readonly IUserRepository _userRepository;
         private readonly IConfigManager _configManager;
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, IConfigManager configManager) : base(unitOfWork)
@@ -137,9 +135,48 @@ namespace CrimeFile.Infra.Services
                 return serviceResult;
             });
         }
-        public async Task<int> Edit(User user)
+        public async Task<ServiceResult<int>> Edit(EditUserDTO editUserDTO)
         {
-            return await _userRepository.Edit(user);
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<int>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _userRepository.EditUser(editUserDTO);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    serviceResult.AddErrors(ex.Message);
+                    serviceResult.Status = ResultCode.Forbidden;
+                    return serviceResult;
+                }
+                return serviceResult;
+            });
+        }
+
+        public async Task<ServiceResult<int>> Delete(int userId)
+        {
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<int>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _userRepository.Delete(userId);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    serviceResult.AddErrors(ex.Message);
+                    serviceResult.Status = ResultCode.Forbidden;
+                    return serviceResult;
+                }
+                return serviceResult;
+            });
         }
     }
+
+   
 }

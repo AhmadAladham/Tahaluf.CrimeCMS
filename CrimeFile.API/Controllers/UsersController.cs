@@ -103,12 +103,18 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("Edit")]
-        public async Task<IActionResult> Edit([FromBody] User user)
+        public async Task<IActionResult> Edit([FromBody] EditUserDTO editUserDTO)
         {
-            var data = await _userService.Edit(user);
+            var data = await _userService.Edit(editUserDTO);
             return Ok(data);
         }
 
-        
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _userService.Delete(id);
+            return Ok(result);
+        }
     }
 }

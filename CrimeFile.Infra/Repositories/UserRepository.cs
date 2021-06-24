@@ -194,12 +194,27 @@ namespace CrimeFile.Infra.Repositories
             return usersPagedList;
         }
 
-        public async Task<int> Edit(User user)
+        public async Task<int> EditUser(EditUserDTO editUserDTO)
         {
-            return 1;
+            _queryParameters.Add("@UserId", editUserDTO.UserId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            _queryParameters.Add("@PhoneNumber", editUserDTO.PhoneNumber, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@FirstName", editUserDTO.FirstName, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@LastName", editUserDTO.LastName, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@Email", editUserDTO.Email, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@DateOfBirth", editUserDTO.DateOfBirth, dbType: DbType.Date, direction: ParameterDirection.Input);
+            _queryParameters.Add("@Gender", editUserDTO.Gender, dbType: DbType.AnsiStringFixedLength, direction: ParameterDirection.Input);
+            var result = await _dbContext.Connection.ExecuteAsync("EditUser", _queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
+            return result;
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(int userId)
+        {
+            _queryParameters.Add("@UserId", userId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            var result = await _dbContext.Connection.ExecuteAsync("DeleteUser", _queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public async Task<int> Edit(User user)
         {
             return 0;
         }
