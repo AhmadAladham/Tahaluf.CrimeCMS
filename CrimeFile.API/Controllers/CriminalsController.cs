@@ -4,6 +4,7 @@ using CrimeFile.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,21 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<Criminal>), StatusCodes.Status200OK)]
         //[Permission(Permissions.List)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] CriminalParameters criminalParameters)
         {
-            var result = await _criminalService.GetAll();
-            return Ok(result);
+            var criminals = await _criminalService.GetAllPaged(criminalParameters);
+            var metadata = new
+            {
+                criminals.Data.TotalCount,
+                criminals.Data.PageSize,
+                criminals.Data.CurrentPage,
+                criminals.Data.TotalPages,
+                criminals.Data.HasNext,
+                criminals.Data.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(criminals);
         }
 
         [HttpGet]
@@ -43,7 +55,7 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Criminal), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AllCriminalsDTO), StatusCodes.Status200OK)]
         [Route("NationalNumber/{nationalNumber}")]
         //[Permission(Permissions.List)]
         public async Task<IActionResult> GetCriminalByNationalNumber(string nationalNumber)

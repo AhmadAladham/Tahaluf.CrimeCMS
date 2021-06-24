@@ -9,8 +9,9 @@ namespace CrimeFile.Core.Repositories
 {
     public interface ICriminalRepository : IRepository<Criminal>
     {
-        Task<Criminal> GetById(int id);
+        Task<List<Criminal>> GetById(int id);
         Task<Criminal> GetByNationalNumber(string nationalNumber);
         Task<IEnumerable<Criminal>> Search(CriminalDto criminalDto);
+        Task<PagedList<AllCriminalsDTO>> GetAllPaged(CriminalParameters criminalParameters);
     }
 }
