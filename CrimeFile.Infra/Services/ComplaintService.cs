@@ -58,6 +58,26 @@ namespace CrimeFile.Infra.Services
             });
         }
 
+        public async Task<ServiceResult<Complaint>> GetByUserId(int id)
+        {
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<Complaint>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _complaintRepository.GetByUserId(id);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    // _ = ex.Message;
+                }
+
+                return serviceResult;
+            });
+        }
+
         public async Task<ServiceResult<int>> Create(Complaint complaint)
         {
             return await ExecuteAsync(async x =>

@@ -17,5 +17,6 @@ namespace CrimeFile.Core.Repositories
         Task<GenerateCodeDTO> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO);
         Task<int> ResetPassword(ResetPasswordDTO resetPasswordDTO);
         Task<PagedList<UserDTO>> GetAllPaged(UserParameters userParameters);
+        Task<PagedList<UserDTO>> Search(SearchUserDTO searchUserDTO);
     }
 }

@@ -145,14 +145,45 @@ namespace CrimeFile.Infra.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<Criminal>> Search(CriminalDto criminalDto)
+        public async Task<PagedList<Criminal>> Search(SearchCriminalsDTO searchCriminalsDTO)
         {
-            queryParameters.Add("@CriminalFirstName", criminalDto.CriminalFirstName, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@DateFrom", criminalDto.DateFrom, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@DateTo", criminalDto.DateTo, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeTtile", criminalDto.CrimeTtile, dbType: DbType.String, direction: ParameterDirection.Input);
-            var result = await _dbContext.Connection.QueryAsync<Criminal>("SearchCriminals", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
-            return (IEnumerable<Criminal>)result;
+            queryParameters.Add("@CriminalName", searchCriminalsDTO.CriminalName, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@HeightFrom", searchCriminalsDTO.HeightFrom, dbType: DbType.Decimal, direction: ParameterDirection.Input);
+            queryParameters.Add("@HeightTo", searchCriminalsDTO.HeightTo, dbType: DbType.Decimal, direction: ParameterDirection.Input);
+            queryParameters.Add("@WeightFrom", searchCriminalsDTO.WeightFrom, dbType: DbType.Decimal, direction: ParameterDirection.Input);
+            queryParameters.Add("@WeightTo", searchCriminalsDTO.WeightTo, dbType: DbType.Decimal, direction: ParameterDirection.Input);
+            queryParameters.Add("@SortingCol", searchCriminalsDTO.SortingColumn, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@SortType", searchCriminalsDTO.SortType, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@PageNumber", searchCriminalsDTO.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@RowsOfPage", searchCriminalsDTO.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@TotalCount", null, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            var result = await _dbContext.Connection.QueryAsync<Criminal, int, Tuple<Criminal, int>>("SearchCriminals"
+                , (criminal, totalCount) =>
+                {
+                    Tuple<Criminal, int> t = new Tuple<Criminal, int>(criminal, totalCount);
+                    return t;
+                }
+                , splitOn: "TotalCount"
+                , transaction: _dbContext.Transaction
+                , param: queryParameters
+                , commandType: CommandType.StoredProcedure);
+            PagedList<Criminal> crimesPagedList;
+            var criminals = new List<Criminal>();
+            if (result.Count() != 0)
+            {
+                int totalCount = result.FirstOrDefault().Item2;
+                foreach (var item in result)
+                {
+                    criminals.Add(item.Item1);
+                }
+                crimesPagedList = new PagedList<Criminal>(criminals, totalCount, searchCriminalsDTO.PageNumber, searchCriminalsDTO.PageSize);
+            }
+            else
+            {
+                crimesPagedList = new PagedList<Criminal>(criminals, 0, searchCriminalsDTO.PageNumber, searchCriminalsDTO.PageSize);
+            }
+            return crimesPagedList;
         }
 
     }

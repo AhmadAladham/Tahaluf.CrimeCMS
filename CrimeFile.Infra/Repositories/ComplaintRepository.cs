@@ -30,6 +30,13 @@ namespace CrimeFile.Infra.Repositories
             return result;
         }
 
+        public async Task<Complaint> GetByUserId(int id)
+        {
+            queryParameters.Add("@UserId", id, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            var result = await _dbContext.Connection.QueryFirstOrDefaultAsync<Complaint>("GetComplaintByUserId", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
         public async Task<List<Complaint>> GetAll()
         {
             return new List<Complaint>();

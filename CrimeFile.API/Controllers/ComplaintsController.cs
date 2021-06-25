@@ -1,6 +1,7 @@
 ﻿using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace CrimeFile.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class ComplaintsController : ControllerBase
     {
         private readonly IComplaintService _complaintService;
@@ -46,10 +48,20 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [Route("{id}")]
         //[Permission(Permissions.List)]
-        public async Task<IActionResult> GetStationById(int id)
+        public async Task<IActionResult> GetComplaintById(int id)
         {
-            var data = await _complaintService.GetById(id);
-            return Ok(data);
+            var result = await _complaintService.GetById(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
+        [Route("User/{id}")]
+        //[Permission(Permissions.List)]
+        public async Task<IActionResult> GetComplaintByUserId(int id)
+        {
+            var result = await _complaintService.GetByUserId(id);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -57,8 +69,8 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] Complaint complaint)
         {
-            var data = await _complaintService.Create(complaint);
-            return Ok(data);
+            var result = await _complaintService.Create(complaint);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -66,15 +78,15 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Edit([FromBody] Complaint complaint)
         {
-            var data = await _complaintService.Edit(complaint);
-            return Ok(data);
+            var result = await _complaintService.Edit(complaint);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _complaintService.Delete(id);
-            return Ok(data);
+            var result = await _complaintService.Delete(id);
+            return Ok(result);
         }
     }
 }

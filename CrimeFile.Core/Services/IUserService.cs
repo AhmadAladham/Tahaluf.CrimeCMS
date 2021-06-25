@@ -18,5 +18,6 @@ namespace CrimeFile.Core.Services
         Task<ServiceResult<GenerateCodeDTO>> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO);
         Task<ServiceResult<int>> ResetPassword(ResetPasswordDTO resetPasswordDTO);
         Task<ServiceResult<int>> Delete(int id);
+        Task<ServiceResult<PagedList<UserDTO>>> Search(SearchUserDTO searchUserDTO);
     }
 }

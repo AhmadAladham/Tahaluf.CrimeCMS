@@ -138,14 +138,14 @@ namespace CrimeFile.Infra.Services
             });
         }
 
-        public async Task<ServiceResult<IEnumerable<Criminal>>> Search(CriminalDto criminalDto)
+        public async Task<ServiceResult<PagedList<Criminal>>> Search(SearchCriminalsDTO searchCriminalsDTO)
         {
             return await ExecuteAsync(async x =>
             {
-                var serviceResult = new ServiceResult<IEnumerable<Criminal>>(ResultCode.BadRequest);
+                var serviceResult = new ServiceResult<PagedList<Criminal>>(ResultCode.BadRequest);
                 try
                 {
-                    var result = await _criminalRepository.Search(criminalDto);
+                    var result = await _criminalRepository.Search(searchCriminalsDTO);
                     serviceResult.Data = result;
                     serviceResult.Status = ResultCode.Ok;
                 }
@@ -153,7 +153,6 @@ namespace CrimeFile.Infra.Services
                 {
 
                 }
-
                 return serviceResult;
             });
         }

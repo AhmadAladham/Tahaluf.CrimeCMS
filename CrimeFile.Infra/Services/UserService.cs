@@ -176,6 +176,26 @@ namespace CrimeFile.Infra.Services
                 return serviceResult;
             });
         }
+
+        public async Task<ServiceResult<PagedList<UserDTO>>> Search(SearchUserDTO searchUserDTO)
+        {
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<PagedList<UserDTO>>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _userRepository.Search(searchUserDTO);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                return serviceResult;
+            });
+        }
     }
 
    

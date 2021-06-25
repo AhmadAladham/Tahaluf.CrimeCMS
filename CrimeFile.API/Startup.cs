@@ -51,6 +51,8 @@ namespace CrimeFile.API
             services.AddScoped<IComplaintService, ComplaintService>();
             services.AddScoped<ICrimeRepository, CrimeRepository>();
             services.AddScoped<ICrimeService, CrimeService>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            services.AddScoped<IUserRoleService, UserRoleService>();
             services.AddScoped<IConfigManager, ConfigManager>();
 
             services.AddCors(options =>

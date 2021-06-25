@@ -11,7 +11,7 @@ namespace CrimeFile.Core.Repositories
     {
         Task<List<Criminal>> GetById(int id);
         Task<Criminal> GetByNationalNumber(string nationalNumber);
-        Task<IEnumerable<Criminal>> Search(CriminalDto criminalDto);
+        Task<PagedList<Criminal>> Search(SearchCriminalsDTO searchCriminalsDTO);
         Task<PagedList<Criminal>> GetAllPaged(CriminalParameters criminalParameters);
     }
 }

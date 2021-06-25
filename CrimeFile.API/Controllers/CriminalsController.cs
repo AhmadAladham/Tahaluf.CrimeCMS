@@ -93,10 +93,25 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(Criminal), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("CriminalSearch")]
-        public async Task<IActionResult> Search([FromBody] CriminalDto criminal)
+        public async Task<IActionResult> Search([FromBody] SearchCriminalsDTO searchCriminalsDTO)
         {
-            var result = await _criminalService.Search(criminal);
-            return Ok(result);
+            var criminals = await _criminalService.Search(searchCriminalsDTO);
+            if (criminals.Data != null)
+            {
+                var metadata = new
+                {
+                    criminals.Data.TotalCount,
+                    criminals.Data.PageSize,
+                    criminals.Data.CurrentPage,
+                    criminals.Data.TotalPages,
+                    criminals.Data.HasNext,
+                    criminals.Data.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            }
+
+            return Ok(criminals);
         }
     }
 }

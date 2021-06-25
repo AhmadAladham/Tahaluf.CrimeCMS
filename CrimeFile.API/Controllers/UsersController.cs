@@ -105,8 +105,8 @@ namespace CrimeFile.API.Controllers
         [Route("Edit")]
         public async Task<IActionResult> Edit([FromBody] EditUserDTO editUserDTO)
         {
-            var data = await _userService.Edit(editUserDTO);
-            return Ok(data);
+            var result = await _userService.Edit(editUserDTO);
+            return Ok(result);
         }
 
 
@@ -115,6 +115,32 @@ namespace CrimeFile.API.Controllers
         {
             var result = await _userService.Delete(id);
             return Ok(result);
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("UserSearch")]
+        public async Task<IActionResult> Search([FromBody] SearchUserDTO searchUserDTO)
+        {
+            var users = await _userService.Search(searchUserDTO);
+            if (users.Data != null)
+            {
+                var metadata = new
+                {
+                    users.Data.TotalCount,
+                    users.Data.PageSize,
+                    users.Data.CurrentPage,
+                    users.Data.TotalPages,
+                    users.Data.HasNext,
+                    users.Data.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            }
+
+            return Ok(users);
         }
     }
 }

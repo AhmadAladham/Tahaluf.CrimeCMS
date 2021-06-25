@@ -11,6 +11,7 @@ namespace CrimeFile.Core.Services
     public interface IComplaintService:IBaseService
     {
         Task<ServiceResult<Complaint>> GetById(int id);
+        Task<ServiceResult<Complaint>> GetByUserId(int id);
         Task<ServiceResult<PagedList<AllComplaintsDTO>>> GetAllPaged(ComplaintParameter complaintParameter);
         Task<ServiceResult<int>> Create(Complaint complaint);
         Task<ServiceResult<int>> Edit(Complaint complaint);

@@ -214,9 +214,41 @@ namespace CrimeFile.Infra.Repositories
             return result;
         }
 
-        public async Task<int> Edit(User user)
+        public async Task<PagedList<UserDTO>> Search(SearchUserDTO userDTO)
         {
-            return 0;
+            _queryParameters.Add("@PhoneNumber", userDTO.PhoneNumber, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@FirstName", userDTO.FirstName, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@RoleId", userDTO.RoleId, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@PageNumber", userDTO.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            _queryParameters.Add("@RowsOfPage", userDTO.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            _queryParameters.Add("@TotalCount", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+            _queryParameters.Add("@SortingCol", userDTO.SortingColumn, dbType: DbType.String, direction: ParameterDirection.Input);
+            _queryParameters.Add("@SortType", userDTO.SortType, dbType: DbType.String, direction: ParameterDirection.Input);
+            var result = await _dbContext.Connection.QueryAsync<UserDTO, int, Tuple<UserDTO, int>>("SearchUsers"
+               , (userDTO, tCount) =>
+               {
+                   Tuple<UserDTO, int> t = new Tuple<UserDTO, int>(userDTO, tCount);
+                   return t;
+               }
+               , splitOn: "TotalCount"
+               , transaction: _dbContext.Transaction
+               , param: _queryParameters
+               , commandType: CommandType.StoredProcedure);
+
+            var users = new List<UserDTO>();
+            int totalCount = 0;
+            if (result.Count() > 0) totalCount = result.FirstOrDefault().Item2;
+            foreach (var item in result)
+            {
+                users.Add(item.Item1);
+            }
+            var crimesPagedList = new PagedList<UserDTO>(users, totalCount, userDTO.PageNumber, userDTO.PageSize);
+            return crimesPagedList;
+        }
+
+        public Task<int> Edit(User entity)
+        {
+            throw new NotImplementedException();
         }
     }
 
