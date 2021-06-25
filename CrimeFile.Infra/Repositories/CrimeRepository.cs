@@ -95,7 +95,6 @@ namespace CrimeFile.Infra.Repositories
         {
             queryParameters.Add("@CrimeId", crime.CrimeId, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@CrimeTtile", crime.CrimeTtile, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeEntryDate", crime.CrimeEntryDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@CrimeDate", crime.CrimeDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@CloseDate", crime.CloseDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@IsClosed", crime.IsClosed, dbType: DbType.Boolean, direction: ParameterDirection.Input);

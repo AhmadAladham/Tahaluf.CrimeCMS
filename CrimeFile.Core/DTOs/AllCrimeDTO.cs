@@ -8,6 +8,7 @@ namespace CrimeFile.Core.DTOs
     {
         public int CrimeId { get; set; }
         public int StationId { get; set; }
+        public string CriminalNationalNumber { get; set; }
         public int CrimeCategoryId { get; set; }
         public int? CriminalId { get; set; }
         public string CrimeTtile { get; set; }

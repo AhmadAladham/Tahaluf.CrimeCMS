@@ -48,7 +48,7 @@ namespace CrimeFile.Infra.Repositories
 
                 criminal.Crimes = g.Where(g => g.Crimes.Any() && g.Crimes.Count > 0)
                 .Select(p => p.Crimes.Single())
-                .GroupBy(crime => crime.CriminalId).Select(crime => new Crime
+                .GroupBy(crime => crime.CrimeId).Select(crime => new Crime
                 {
                     CrimeId = crime.First().CrimeId,
                     CrimeTtile = crime.First().CrimeTtile,
