@@ -18,11 +18,11 @@ namespace CrimeFile.Infra.Services
             _criminalRepository = criminalRepository;
         }
 
-        public async Task<ServiceResult<PagedList<AllCriminalsDTO>>> GetAllPaged(CriminalParameters criminalParameters)
+        public async Task<ServiceResult<PagedList<Criminal>>> GetAllPaged(CriminalParameters criminalParameters)
         {
             return await ExecuteAsync(async x =>
             {
-                var serviceResult = new ServiceResult<PagedList<AllCriminalsDTO>>(ResultCode.BadRequest);
+                var serviceResult = new ServiceResult<PagedList<Criminal>>(ResultCode.BadRequest);
                 try
                 {
                     var result = await _criminalRepository.GetAllPaged(criminalParameters);

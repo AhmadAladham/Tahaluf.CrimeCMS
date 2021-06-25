@@ -71,7 +71,7 @@ namespace CrimeFile.Infra.Repositories
             return new List<Criminal>();
         }
 
-        public async Task<PagedList<AllCriminalsDTO>> GetAllPaged(CriminalParameters criminalParameters)
+        public async Task<PagedList<Criminal>> GetAllPaged(CriminalParameters criminalParameters)
         {
             queryParameters.Add("@SortingCol", criminalParameters.SortingColumn, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@SortType", criminalParameters.SortType, dbType: DbType.String, direction: ParameterDirection.Input);
@@ -79,18 +79,18 @@ namespace CrimeFile.Infra.Repositories
             queryParameters.Add("@RowsOfPage", criminalParameters.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@TotalCount", null, dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-            var result = await _dbContext.Connection.QueryAsync<AllCriminalsDTO, int, Tuple<AllCriminalsDTO , int>>("GetAllCriminals"
-                , (CriminalDto, tCount) =>
+            var result = await _dbContext.Connection.QueryAsync<Criminal, int, Tuple<Criminal , int>>("GetAllCriminals"
+                , (criminal, totalCount) =>
                 {
-                    Tuple<AllCriminalsDTO, int> t = new Tuple<AllCriminalsDTO, int>(CriminalDto, tCount);
+                    Tuple<Criminal, int> t = new Tuple<Criminal, int>(criminal, totalCount);
                     return t;
                 }
                 , splitOn: "TotalCount"
                 , transaction: _dbContext.Transaction
                 , param: queryParameters
                 , commandType: CommandType.StoredProcedure);
-            PagedList<AllCriminalsDTO> crimesPagedList;
-            var criminals = new List<AllCriminalsDTO>();
+            PagedList<Criminal> crimesPagedList;
+            var criminals = new List<Criminal>();
             if (result.Count() != 0)
             {
                 int totalCount = result.FirstOrDefault().Item2;
@@ -98,11 +98,11 @@ namespace CrimeFile.Infra.Repositories
                 {
                     criminals.Add(item.Item1);
                 }
-                crimesPagedList = new PagedList<AllCriminalsDTO>(criminals, totalCount, criminalParameters.PageNumber, criminalParameters.PageSize);
+                crimesPagedList = new PagedList<Criminal>(criminals, totalCount, criminalParameters.PageNumber, criminalParameters.PageSize);
             }
             else
             {
-                crimesPagedList = new PagedList<AllCriminalsDTO>(criminals, 0, criminalParameters.PageNumber, criminalParameters.PageSize);
+                crimesPagedList = new PagedList<Criminal>(criminals, 0, criminalParameters.PageNumber, criminalParameters.PageSize);
             }
             return crimesPagedList;
         }
