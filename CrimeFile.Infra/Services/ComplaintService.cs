@@ -1,4 +1,5 @@
 ﻿using CrimeFile.Core.Common;
+using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Repositories;
 using CrimeFile.Core.Services;
@@ -17,20 +18,20 @@ namespace CrimeFile.Infra.Services
             _complaintRepository = complaintRepository;
         }
 
-        public async Task<ServiceResult<List<Complaint>>> GetAll()
+        public async Task<ServiceResult<PagedList<AllComplaintsDTO>>> GetAllPaged(ComplaintParameter complaintParameter)
         {
             return await ExecuteAsync(async x =>
             {
-                var serviceResult = new ServiceResult<List<Complaint>>(ResultCode.BadRequest);
+                var serviceResult = new ServiceResult<PagedList<AllComplaintsDTO>>(ResultCode.BadRequest);
                 try
                 {
-                    var result = await _complaintRepository.GetAll();
+                    var result = await _complaintRepository.GetAllPaged(complaintParameter);
                     serviceResult.Data = result;
                     serviceResult.Status = ResultCode.Ok;
                 }
                 catch (Exception ex)
                 {
-                    // _ = ex.Message;
+
                 }
 
                 return serviceResult;

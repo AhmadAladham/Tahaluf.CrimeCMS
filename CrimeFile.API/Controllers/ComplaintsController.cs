@@ -1,7 +1,9 @@
-﻿using CrimeFile.Core.Entities;
+﻿using CrimeFile.Core.DTOs;
+using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +23,23 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Complaint>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<AllComplaintsDTO>), StatusCodes.Status200OK)]
         //[Permission(Permissions.List)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ComplaintParameter complaintParameter)
         {
-            var data = await _complaintService.GetAll();
-            return Ok(data);
+            var crimes = await _complaintService.GetAllPaged(complaintParameter);
+            var metadata = new
+            {
+                crimes.Data.TotalCount,
+                crimes.Data.PageSize,
+                crimes.Data.CurrentPage,
+                crimes.Data.TotalPages,
+                crimes.Data.HasNext,
+                crimes.Data.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(crimes);
         }
 
         [HttpGet]
