@@ -236,14 +236,15 @@ namespace CrimeFile.Infra.Repositories
                , commandType: CommandType.StoredProcedure);
 
             var users = new List<UserDTO>();
+           
             int totalCount = 0;
             if (result.Count() > 0) totalCount = result.FirstOrDefault().Item2;
             foreach (var item in result)
             {
                 users.Add(item.Item1);
             }
-            var crimesPagedList = new PagedList<UserDTO>(users, totalCount, userDTO.PageNumber, userDTO.PageSize);
-            return crimesPagedList;
+            var usersPagedList = new PagedList<UserDTO>(users, totalCount, userDTO.PageNumber, userDTO.PageSize);
+            return usersPagedList;
         }
 
         public Task<int> Edit(User entity)

@@ -157,7 +157,6 @@ namespace CrimeFile.Infra.Repositories
             queryParameters.Add("@PageNumber", searchCriminalsDTO.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@RowsOfPage", searchCriminalsDTO.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@TotalCount", null, dbType: DbType.Int32, direction: ParameterDirection.Output);
-
             var result = await _dbContext.Connection.QueryAsync<Criminal, int, Tuple<Criminal, int>>("SearchCriminals"
                 , (criminal, totalCount) =>
                 {
@@ -168,7 +167,7 @@ namespace CrimeFile.Infra.Repositories
                 , transaction: _dbContext.Transaction
                 , param: queryParameters
                 , commandType: CommandType.StoredProcedure);
-            PagedList<Criminal> crimesPagedList;
+            PagedList<Criminal> criminalsPagedList;
             var criminals = new List<Criminal>();
             if (result.Count() != 0)
             {
@@ -177,13 +176,14 @@ namespace CrimeFile.Infra.Repositories
                 {
                     criminals.Add(item.Item1);
                 }
-                crimesPagedList = new PagedList<Criminal>(criminals, totalCount, searchCriminalsDTO.PageNumber, searchCriminalsDTO.PageSize);
+                criminalsPagedList = new PagedList<Criminal>(criminals, totalCount, searchCriminalsDTO.PageNumber, searchCriminalsDTO.PageSize);
             }
             else
             {
-                crimesPagedList = new PagedList<Criminal>(criminals, 0, searchCriminalsDTO.PageNumber, searchCriminalsDTO.PageSize);
+                criminalsPagedList = new PagedList<Criminal>(criminals, 0, searchCriminalsDTO.PageNumber, searchCriminalsDTO.PageSize);
             }
-            return crimesPagedList;
+            return criminalsPagedList;
+
         }
 
     }
