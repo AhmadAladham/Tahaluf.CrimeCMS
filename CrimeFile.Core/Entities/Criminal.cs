@@ -17,7 +17,7 @@ namespace CrimeFile.Core.Entities
         public DateTime? DateOfBirth { get; set; }
         public string? Address { get; set; }
 
-        public List<Crime> Crimes { get; set; }
+        public List<Crime>? Crimes { get; set; }
 
     }
 }

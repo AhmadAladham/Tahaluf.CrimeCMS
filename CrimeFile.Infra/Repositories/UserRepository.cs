@@ -183,14 +183,22 @@ namespace CrimeFile.Infra.Repositories
                 , transaction: _dbContext.Transaction
                 , param: _queryParameters
                 , commandType: CommandType.StoredProcedure);
-
+            PagedList<UserDTO> usersPagedList;
             var users = new List<UserDTO>();
-            int totalCount = result.FirstOrDefault().Item2;
-            foreach (var item in result)
+            if (result.Count() != 0)
             {
-                users.Add(item.Item1);
+                int totalCount = result.FirstOrDefault().Item2;
+                foreach (var item in result)
+                {
+                    users.Add(item.Item1);
+                }
+                usersPagedList = new PagedList<UserDTO>(users, totalCount, userParameters.PageNumber, userParameters.PageSize);
+               
             }
-            var usersPagedList = new PagedList<UserDTO>(users, totalCount, userParameters.PageNumber, userParameters.PageSize);
+            else
+            {
+                usersPagedList = new PagedList<UserDTO>(users, 0, userParameters.PageNumber, userParameters.PageSize);
+            }
             return usersPagedList;
         }
 
