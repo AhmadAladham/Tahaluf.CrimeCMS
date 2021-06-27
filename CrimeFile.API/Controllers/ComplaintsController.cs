@@ -1,12 +1,17 @@
-﻿using CrimeFile.Core.DTOs;
+﻿using CrimeFile.API.Attributes;
+using CrimeFile.API.Utility;
+using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
+using CrimeFile.Core.Security;
 using CrimeFile.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,9 +23,11 @@ namespace CrimeFile.API.Controllers
     public class ComplaintsController : ControllerBase
     {
         private readonly IComplaintService _complaintService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ComplaintsController(IComplaintService complaintService)
+        public ComplaintsController(IComplaintService complaintService, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _complaintService = complaintService;
         }
 
@@ -57,10 +64,13 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [Route("User/{id}")]
-        //[Permission(Permissions.List)]
-        public async Task<IActionResult> GetComplaintByUserId(int id)
+        //[Permission(Permissions.)]
+        public async Task<IActionResult> GetComplaintByUserId()
         {
-            var result = await _complaintService.GetByUserId(id);
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var token = SecurityUtility.DecodeToken(authorization);
+            int userId = Convert.ToInt32(token.Claims.First(c => c.Type == "UserId").Value);
+            var result = await _complaintService.GetByUserId(userId);
             return Ok(result);
         }
 

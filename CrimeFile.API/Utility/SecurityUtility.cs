@@ -1,6 +1,7 @@
 ﻿using CrimeFile.Core.Security;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -69,6 +70,14 @@ namespace CrimeFile.API.Utility
             }
 
             return hasMultiple;
+        }
+
+        public static JwtSecurityToken DecodeToken(string authorization)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var tokenString = authorization.ToString().Replace("Bearer ", string.Empty);
+            var token = handler.ReadJwtToken(tokenString);
+            return token;
         }
     }
 }
