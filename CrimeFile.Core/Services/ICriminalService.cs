@@ -10,7 +10,7 @@ namespace CrimeFile.Core.Services
 {
     public interface ICriminalService : IBaseService
     {
-        Task<ServiceResult<List<Criminal>>> GetById(int id);
+        Task<ServiceResult<Criminal>> GetById(int id);
         Task<ServiceResult<Criminal>> GetByNationalNumber(string nationalNumber);
         Task<ServiceResult<PagedList<Criminal>>> GetAllPaged(CriminalParameters criminalParameters);
         Task<ServiceResult<int>> Create(Criminal criminal);

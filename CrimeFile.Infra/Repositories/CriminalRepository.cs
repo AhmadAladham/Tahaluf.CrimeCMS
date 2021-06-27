@@ -23,7 +23,7 @@ namespace CrimeFile.Infra.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Criminal>> GetById(int id)
+        public async Task<Criminal> GetById(int id)
         {
             queryParameters.Add("@CriminalId", id, dbType: DbType.Int32, direction: ParameterDirection.Input);
             var result = await _dbContext.Connection.QueryAsync<Criminal, Crime,
@@ -53,11 +53,12 @@ namespace CrimeFile.Infra.Repositories
                     CrimeId = crime.First().CrimeId,
                     CrimeTtile = crime.First().CrimeTtile,
                     CrimeDate = crime.First().CrimeDate,
-                    CrimeDescription = crime.First().CrimeDescription
+                    CrimeDescription = crime.First().CrimeDescription,
+                    Location = crime.First().Location
                 }).ToList();
                 return criminal;
             }).ToList();
-            return Finalresult;
+            return Finalresult.FirstOrDefault();
         }
         public async Task<Criminal> GetByNationalNumber(string nationalNumber)
         {
