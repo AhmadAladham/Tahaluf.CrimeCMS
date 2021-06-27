@@ -10,7 +10,7 @@ namespace CrimeFile.Core.Repositories
     public interface IComplaintRepository: IRepository<Complaint>
     {
         Task<Complaint> GetById(int id);
-        Task<Complaint> GetByUserId(int id);
+        Task<List<Complaint>> GetByUserId(int id);
         Task<PagedList<AllComplaintsDTO>> GetAllPaged(ComplaintParameter complaintParameter);
     }
 }
