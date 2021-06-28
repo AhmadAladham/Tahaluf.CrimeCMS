@@ -63,7 +63,7 @@ namespace CrimeFile.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
-        [Route("User/{id}")]
+        [Route("User")]
         //[Permission(Permissions.)]
         public async Task<IActionResult> GetComplaintByUserId()
         {
