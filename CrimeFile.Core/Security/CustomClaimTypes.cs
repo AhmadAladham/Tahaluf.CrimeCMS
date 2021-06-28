@@ -7,7 +7,7 @@ namespace CrimeFile.Core.Security
     public static class CustomClaimTypes
     {
         public const string FullNameEn = "FullNameEn";
-        public const string Role = "FullNameEn";
+        public const string Role = "Role";
         public const string FullNameAr = "FullNameAr";
         public const string Group = "Group";
         public const string Permission = "Permission";
