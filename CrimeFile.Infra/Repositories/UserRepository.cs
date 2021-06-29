@@ -112,7 +112,12 @@ namespace CrimeFile.Infra.Repositories
             {
                 Subject = new ClaimsIdentity(new Claim[]
             {
-                    new Claim(CustomClaimTypes.FullNameEn, user.FirstName+" " + user.LastName),
+                    new Claim(CustomClaimTypes.FirstName, user.FirstName),
+                    new Claim(CustomClaimTypes.LastName, user.LastName),
+                    new Claim(CustomClaimTypes.EmailIsConfirmed, user.EmailIsConfirmed.ToString()),
+                    new Claim(CustomClaimTypes.Email, user.Email),
+                    new Claim(CustomClaimTypes.PhoneNumber, user.PhoneNumber),
+                    new Claim(CustomClaimTypes.DateOfBirth, (user.DateOfBirth).ToShortDateString()),
                     new Claim(CustomClaimTypes.UserId,Convert.ToString(user.UserId)),
                     new Claim(CustomClaimTypes.Role, user.Role.RoleName),
                     new Claim(CustomClaimTypes.Permission, userPermissions)

@@ -87,7 +87,7 @@ namespace CrimeFile.Infra.Repositories
             queryParameters.Add("@CrimeCategoryId", complaint.CrimeCategoryId, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@ComplaintTitle", complaint.ComplaintTitle, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@ExpectedCrimeDate", complaint.ExpectedCrimeDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@ComplaintDate", complaint.ComplaintDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+            queryParameters.Add("@ComplaintDate", DateTime.Now, dbType: DbType.DateTime, direction: ParameterDirection.Input);
             queryParameters.Add("@ComplaintDescription", complaint.ComplaintDescription, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@CriminalDescription", complaint.CriminalDescription, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@ComplaintStatus", complaint.ComplaintStatus, dbType: DbType.Int32, direction: ParameterDirection.Input);
