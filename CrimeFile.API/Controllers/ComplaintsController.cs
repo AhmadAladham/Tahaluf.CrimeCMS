@@ -79,6 +79,9 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] Complaint complaint)
         {
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var token = SecurityUtility.DecodeToken(authorization);
+            complaint.UserId = Convert.ToInt32(token.Claims.First(c => c.Type == "UserId").Value);
             var result = await _complaintService.Create(complaint);
             return Ok(result);
         }

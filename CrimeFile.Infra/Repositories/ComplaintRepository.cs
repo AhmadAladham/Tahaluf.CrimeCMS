@@ -92,7 +92,7 @@ namespace CrimeFile.Infra.Repositories
             queryParameters.Add("@CriminalDescription", complaint.CriminalDescription, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@ComplaintStatus", complaint.ComplaintStatus, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@CrimeLocation", complaint.CrimeLocation, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@Image", complaint.Image, dbType: DbType.String, direction: ParameterDirection.Input);
+          
             var result = await _dbContext.Connection.ExecuteAsync("CreateComplaint", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
@@ -110,7 +110,7 @@ namespace CrimeFile.Infra.Repositories
             queryParameters.Add("@CriminalDescription", complaint.CriminalDescription, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@ComplaintStatus", complaint.ComplaintStatus, dbType: DbType.Int32, direction: ParameterDirection.Input);
             queryParameters.Add("@CrimeLocation", complaint.CrimeLocation, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@Image", complaint.Image, dbType: DbType.String, direction: ParameterDirection.Input);
+          
             var result = await _dbContext.Connection.ExecuteAsync("EditComplaint", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
