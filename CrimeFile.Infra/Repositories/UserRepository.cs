@@ -114,10 +114,11 @@ namespace CrimeFile.Infra.Repositories
             {
                     new Claim(CustomClaimTypes.FirstName, user.FirstName),
                     new Claim(CustomClaimTypes.LastName, user.LastName),
-                    new Claim(CustomClaimTypes.EmailIsConfirmed, user.EmailIsConfirmed.ToString()),
+                
                     new Claim(CustomClaimTypes.Email, user.Email),
                     new Claim(CustomClaimTypes.PhoneNumber, user.PhoneNumber),
                     new Claim(CustomClaimTypes.DateOfBirth, (user.DateOfBirth).ToShortDateString()),
+                     new Claim(CustomClaimTypes.EmailIsConfirmed, user.EmailIsConfirmed.ToString()),
                     new Claim(CustomClaimTypes.UserId,Convert.ToString(user.UserId)),
                     new Claim(CustomClaimTypes.Role, user.Role.RoleName),
                     new Claim(CustomClaimTypes.Permission, userPermissions)
@@ -215,7 +216,7 @@ namespace CrimeFile.Infra.Repositories
             _queryParameters.Add("@LastName", editUserDTO.LastName, dbType: DbType.String, direction: ParameterDirection.Input);
             _queryParameters.Add("@Email", editUserDTO.Email, dbType: DbType.String, direction: ParameterDirection.Input);
             _queryParameters.Add("@DateOfBirth", editUserDTO.DateOfBirth, dbType: DbType.Date, direction: ParameterDirection.Input);
-            _queryParameters.Add("@Gender", editUserDTO.Gender, dbType: DbType.AnsiStringFixedLength, direction: ParameterDirection.Input);
+           
             var result = await _dbContext.Connection.ExecuteAsync("EditUser", _queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
