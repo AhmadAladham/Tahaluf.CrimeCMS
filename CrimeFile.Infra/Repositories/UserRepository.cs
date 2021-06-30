@@ -161,10 +161,10 @@ namespace CrimeFile.Infra.Repositories
         {
             changePasswordDTO.NewPassword = _passwordHasher.HashPassword(changePasswordDTO.NewPassword);
             changePasswordDTO.OldPassword = _passwordHasher.HashPassword(changePasswordDTO.OldPassword);
-            changePasswordDTO.ConfirmPassword = _passwordHasher.HashPassword(changePasswordDTO.ConfirmPassword);
+           
             _queryParameters.Add("@OldPassword", changePasswordDTO.OldPassword, dbType: DbType.String, direction: ParameterDirection.Input);
             _queryParameters.Add("@UserId", changePasswordDTO.UserId, dbType: DbType.String, direction: ParameterDirection.Input);
-            _queryParameters.Add("@ConfirmPassword", changePasswordDTO.ConfirmPassword, dbType: DbType.String, direction: ParameterDirection.Input);
+          
             _queryParameters.Add("@NewPassword", changePasswordDTO.NewPassword, dbType: DbType.String, direction: ParameterDirection.Input);
             var result = await _dbContext.Connection.ExecuteAsync("ChangePassword", _queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
