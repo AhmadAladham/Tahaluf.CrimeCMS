@@ -17,6 +17,7 @@ namespace CrimeFile.Core.Services
         Task <ServiceResult<string>> VerifyEmail(EmailVerificationDTO emailVerification);
         Task<ServiceResult<GenerateCodeDTO>> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO);
         Task<ServiceResult<int>> ResetPassword(ResetPasswordDTO resetPasswordDTO);
+        Task<ServiceResult<int>> ChangePassword(ChangePasswordDTO changePasswordDTO);
         Task<ServiceResult<int>> Delete(int id);
         Task<ServiceResult<PagedList<UserDTO>>> Search(SearchUserDTO searchUserDTO);
     }

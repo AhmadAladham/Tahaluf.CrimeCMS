@@ -1,10 +1,13 @@
-﻿using CrimeFile.Core.DTOs;
+﻿using CrimeFile.API.Utility;
+using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CrimeFile.API.Controllers
@@ -16,13 +19,14 @@ namespace CrimeFile.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
-        
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsersController(IUserService userService, IEmailService emailService )
+        public UsersController(IUserService userService, IEmailService emailService, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _emailService = emailService;
-           
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         [HttpGet]
@@ -78,6 +82,18 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDTO)
+        {
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var token = SecurityUtility.DecodeToken(authorization);
+            changePasswordDTO.UserId = Convert.ToInt32(token.Claims.First(c => c.Type == "UserId").Value);
+            var result = await _userService.ChangePassword(changePasswordDTO);
+            return Ok(result);
+        }
+
+        [HttpPost]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("VerifyEmail")]
@@ -105,6 +121,9 @@ namespace CrimeFile.API.Controllers
         [Route("Edit")]
         public async Task<IActionResult> Edit([FromBody] EditUserDTO editUserDTO)
         {
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var token = SecurityUtility.DecodeToken(authorization);
+            editUserDTO.UserId = Convert.ToInt32(token.Claims.First(c => c.Type == "UserId").Value);
             var result = await _userService.Edit(editUserDTO);
             return Ok(result);
         }

@@ -135,6 +135,29 @@ namespace CrimeFile.Infra.Services
                 return serviceResult;
             });
         }
+
+
+        public async Task<ServiceResult<int>> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<int>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _userRepository.ChangePassword(changePasswordDTO);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    serviceResult.AddErrors(ex.Message);
+                    serviceResult.Status = ResultCode.Unauthorized;
+                    return serviceResult;
+                }
+                return serviceResult;
+            });
+        }
+
         public async Task<ServiceResult<int>> Edit(EditUserDTO editUserDTO)
         {
             return await ExecuteAsync(async x =>
