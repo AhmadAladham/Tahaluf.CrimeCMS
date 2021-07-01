@@ -81,7 +81,7 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Crime), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("CrimeSearch")]
         public async Task<IActionResult> Search([FromBody] CrimeDto crime)

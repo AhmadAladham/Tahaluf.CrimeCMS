@@ -16,5 +16,6 @@ namespace CrimeFile.Core.Services
         Task<ServiceResult<int>> Create(Complaint complaint);
         Task<ServiceResult<int>> Edit(Complaint complaint);
         Task<ServiceResult<int>> Delete(int id);
+        Task<ServiceResult<PagedList<AllComplaintsDTO>>> Search(SearchComplaintsDTO searchComplaintsDTO);
     }
 }
