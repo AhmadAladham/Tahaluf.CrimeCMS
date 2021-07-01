@@ -13,7 +13,7 @@ namespace CrimeFile.Core.Services
         Task<ServiceResult<PagedList<UserDTO>>> GetAllPaged(UserParameters userParameters);
         Task<ServiceResult<string>> SignIn(SignInDTO signInDTO);
         Task<ServiceResult<string>> RefreshToken(int userId);
-        Task<RegisterResultDTO> Register(RegisterDTO registerDTO);
+        Task<ServiceResult<RegisterResultDTO>> Register(RegisterDTO registerDTO);
         Task<ServiceResult<int>> Edit(EditUserDTO editUserDTO);
         Task <ServiceResult<string>> VerifyEmail(EmailVerificationDTO emailVerification);
         Task<ServiceResult<GenerateCodeDTO>> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO);

@@ -112,7 +112,7 @@ namespace CrimeFile.Infra.Repositories
             _queryParameters.Add("@RoleId", registerDTO.RoleId, dbType: DbType.Int32, direction: ParameterDirection.Input);
             _queryParameters.Add("@Gender", registerDTO.Gender, dbType: DbType.AnsiStringFixedLength, direction: ParameterDirection.Input);
             _queryParameters.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
-            var result = await  _dbContext.Connection.QueryFirstOrDefaultAsync<RegisterResultDTO>("RegisterUser", _queryParameters, commandType: CommandType.StoredProcedure);
+            var result = await  _dbContext.Connection.QueryFirstOrDefaultAsync<RegisterResultDTO>("RegisterUser", _queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             var registerResult = new RegisterResultDTO
             {
                 UserId = result.UserId,

@@ -68,9 +68,25 @@ namespace CrimeFile.Infra.Services
             });
         }
 
-        public async Task<RegisterResultDTO> Register(RegisterDTO registerDTO)
+        public async Task<ServiceResult<RegisterResultDTO>> Register(RegisterDTO registerDTO)
         {
-            return await _userRepository.Register(registerDTO);
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<RegisterResultDTO>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _userRepository.Register(registerDTO);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    serviceResult.Status = ResultCode.Unauthorized;
+                    serviceResult.AddErrors(ex.Message);
+                    return serviceResult;
+                }
+                return serviceResult;
+            });
         }
 
         public async Task<ServiceResult<string>> SignIn(SignInDTO signInDTO)

@@ -56,9 +56,9 @@ namespace CrimeFile.API.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
-            var data = await _userService.Register(registerDTO);
-            await _emailService.SendVerificationCode(data.Email, data.CodeGenerated);
-            return Ok(data);
+            var result = await _userService.Register(registerDTO);
+            await _emailService.SendVerificationCode(result.Data.Email, result.Data.CodeGenerated);
+            return Ok(result);
         }
 
         [HttpPost]
