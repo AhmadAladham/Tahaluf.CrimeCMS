@@ -89,9 +89,10 @@ namespace CrimeFile.API.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Edit([FromBody] Complaint complaint)
+        [Route("ComplaintStatus")]
+        public async Task<IActionResult> EditComplaintStatus([FromBody] EditComplaintStatusDTO editComplaintStatusDTO)
         {
-            var result = await _complaintService.Edit(complaint);
+            var result = await _complaintService.EditComplaintStatus(editComplaintStatusDTO);
             return Ok(result);
         }
 

@@ -97,21 +97,13 @@ namespace CrimeFile.Infra.Repositories
             return result;
         }
 
-        public async Task<int> Edit(Complaint complaint)
+        public async Task<int> EditComplaintStatus(EditComplaintStatusDTO editComplaintStatusDTO)
         {
-            queryParameters.Add("@ComplaintId", complaint.ComplaintId, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            queryParameters.Add("@UserId", complaint.UserId, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            queryParameters.Add("@StationId", complaint.StationId, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeCategoryId", complaint.CrimeCategoryId, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            queryParameters.Add("@ComplaintTitle", complaint.ComplaintTitle, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@ExpectedCrimeDate", complaint.ExpectedCrimeDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@ComplaintDate", complaint.ComplaintDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-            queryParameters.Add("@ComplaintDescription", complaint.ComplaintDescription, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@CriminalDescription", complaint.CriminalDescription, dbType: DbType.String, direction: ParameterDirection.Input);
-            queryParameters.Add("@ComplaintStatus", complaint.ComplaintStatus, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            queryParameters.Add("@CrimeLocation", complaint.CrimeLocation, dbType: DbType.String, direction: ParameterDirection.Input);
-          
-            var result = await _dbContext.Connection.ExecuteAsync("EditComplaint", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
+            queryParameters.Add("@ComplaintId", editComplaintStatusDTO.ComplaintId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+           
+            queryParameters.Add("@ComplaintStatus", editComplaintStatusDTO.ComplaintStatus, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            
+            var result = await _dbContext.Connection.ExecuteAsync("EditComplaintStatus", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
 
@@ -156,6 +148,11 @@ namespace CrimeFile.Infra.Repositories
             }
             var complaintsPagedList = new PagedList<AllComplaintsDTO>(complaints, totalCount, searchComplaintsDTO.PageNumber, searchComplaintsDTO.PageSize);
             return complaintsPagedList;
+        }
+
+        public Task<int> Edit(Complaint entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

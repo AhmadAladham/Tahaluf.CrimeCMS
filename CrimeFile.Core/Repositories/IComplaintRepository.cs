@@ -11,7 +11,9 @@ namespace CrimeFile.Core.Repositories
     {
         Task<Complaint> GetById(int id);
         Task<List<Complaint>> GetByUserId(int id);
+        Task<int> EditComplaintStatus(EditComplaintStatusDTO editComplaintStatusDTO);
         Task<PagedList<AllComplaintsDTO>> GetAllPaged(ComplaintParameter complaintParameter);
         Task<PagedList<AllComplaintsDTO>> Search(SearchComplaintsDTO searchComplaintsDTO);
+
     }
 }

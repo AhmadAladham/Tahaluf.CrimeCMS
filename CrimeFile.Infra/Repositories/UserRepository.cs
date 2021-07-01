@@ -109,7 +109,7 @@ namespace CrimeFile.Infra.Repositories
             _queryParameters.Add("@FirstName", registerDTO.FirstName, dbType: DbType.String, direction: ParameterDirection.Input);
             _queryParameters.Add("@LastName", registerDTO.LastName, dbType: DbType.String, direction: ParameterDirection.Input);
             _queryParameters.Add("@HashedPassword", registerDTO.Password, dbType: DbType.String, direction: ParameterDirection.Input);
-            _queryParameters.Add("@RoleId", registerDTO.RoleId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            _queryParameters.Add("@RoleId", 2, dbType: DbType.Int32, direction: ParameterDirection.Input);
             _queryParameters.Add("@Gender", registerDTO.Gender, dbType: DbType.AnsiStringFixedLength, direction: ParameterDirection.Input);
             _queryParameters.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
             var result = await  _dbContext.Connection.QueryFirstOrDefaultAsync<RegisterResultDTO>("RegisterUser", _queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);

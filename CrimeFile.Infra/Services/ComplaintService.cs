@@ -99,14 +99,14 @@ namespace CrimeFile.Infra.Services
 
         }
 
-        public async Task<ServiceResult<int>> Edit(Complaint complaint)
+        public async Task<ServiceResult<int>> EditComplaintStatus(EditComplaintStatusDTO editComplaintStatusDTO)
         {
             return await ExecuteAsync(async x =>
             {
                 var serviceResult = new ServiceResult<int>(ResultCode.BadRequest);
                 try
                 {
-                    var result = await _complaintRepository.Edit(complaint);
+                    var result = await _complaintRepository.EditComplaintStatus(editComplaintStatusDTO);
                     serviceResult.Data = result;
                     serviceResult.Status = ResultCode.Created;
                 }

@@ -14,7 +14,7 @@ namespace CrimeFile.Core.Services
         Task<ServiceResult<List<Complaint>>> GetByUserId(int id);
         Task<ServiceResult<PagedList<AllComplaintsDTO>>> GetAllPaged(ComplaintParameter complaintParameter);
         Task<ServiceResult<int>> Create(Complaint complaint);
-        Task<ServiceResult<int>> Edit(Complaint complaint);
+        Task<ServiceResult<int>> EditComplaintStatus(EditComplaintStatusDTO editComplaintStatusDTO);
         Task<ServiceResult<int>> Delete(int id);
         Task<ServiceResult<PagedList<AllComplaintsDTO>>> Search(SearchComplaintsDTO searchComplaintsDTO);
     }

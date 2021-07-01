@@ -62,7 +62,7 @@ namespace CrimeFile.Infra.Repositories
         }
         public async Task<Criminal> GetByNationalNumber(string nationalNumber)
         {
-            queryParameters.Add("@CriminalNationalNumber", nationalNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@CriminalNationalNumber", nationalNumber, dbType: DbType.String, direction: ParameterDirection.Input);
             var result = await _dbContext.Connection.QueryFirstOrDefaultAsync<Criminal>("GetCriminalByNationalNumber", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
