@@ -10,8 +10,10 @@ namespace CrimeFile.Infra.Services
 {
     public class EmailService: BaseService, IEmailService
     {
-        public EmailService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        private readonly IConfigManager _configManager;
+        public EmailService(IUnitOfWork unitOfWork, IConfigManager configManager) : base(unitOfWork)
         {
+            _configManager = configManager;
         }
 
         public async Task<string> SendVerificationCode(string userEmail, int code)
@@ -20,8 +22,8 @@ namespace CrimeFile.Infra.Services
             {
                 EmailDTO email = new EmailDTO
                 {
-                    FromEmail = "crimfilecms@gmail.com",
-                    EmailPassword = "Edbtz696969",
+                    FromEmail = _configManager.CompanyEmail,
+                    EmailPassword = _configManager.CompanyEmailPassword,
                     ToEmail = userEmail,
                     Subject = "Verification Email from Crime File Management System Website",
                     Body = @"<div style = 'text-align:center;'>

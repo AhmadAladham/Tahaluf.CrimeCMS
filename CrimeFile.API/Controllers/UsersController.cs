@@ -1,7 +1,9 @@
-﻿using CrimeFile.API.Utility;
+﻿using CrimeFile.API.Attributes;
+using CrimeFile.API.Utility;
 using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,6 @@ namespace CrimeFile.API.Controllers
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
         public UsersController(IUserService userService, IEmailService emailService, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
@@ -160,6 +161,20 @@ namespace CrimeFile.API.Controllers
             }
 
             return Ok(users);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("RefreshToken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var oldToken = SecurityUtility.DecodeToken(authorization);
+            var userId = Convert.ToInt32(oldToken.Claims.First(c => c.Type == "UserId").Value);
+            var data = await _userService.RefreshToken(userId);
+            return Ok(data);
         }
     }
 }

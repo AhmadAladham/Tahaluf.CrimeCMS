@@ -94,6 +94,27 @@ namespace CrimeFile.Infra.Services
             });
         }
 
+        public async Task<ServiceResult<string>> RefreshToken(int userId)
+        {
+            return await ExecuteAsync(async x =>
+            {
+                var serviceResult = new ServiceResult<string>(ResultCode.BadRequest);
+                try
+                {
+                    var result = await _userRepository.RefreshToken(userId);
+                    serviceResult.Data = result;
+                    serviceResult.Status = ResultCode.Ok;
+                }
+                catch (Exception ex)
+                {
+                    serviceResult.Status = ResultCode.Unauthorized;
+                    serviceResult.Data = ex.Message;
+                    return serviceResult;
+                }
+                return serviceResult;
+            });
+        }
+
         public async Task<ServiceResult<GenerateCodeDTO>> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
         {
             return await ExecuteAsync(async x =>

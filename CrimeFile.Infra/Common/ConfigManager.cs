@@ -20,6 +20,20 @@ namespace CrimeFile.Infra.Common
                 return _configuration["AppSettings:Key"];
             }
         }
+        public string CompanyEmail
+        {
+            get
+            {
+                return _configuration["AppSettings:Email"];
+            }
+        }
+        public string CompanyEmailPassword
+        {
+            get
+            {
+                return _configuration["AppSettings:Password"];
+            }
+        }
 
 
     }
