@@ -62,8 +62,6 @@ namespace CrimeFile.Infra.Services
                     serviceResult.Status = ResultCode.Forbidden;
                     return serviceResult;
                 }
-
-
                 return serviceResult;
             });
         }

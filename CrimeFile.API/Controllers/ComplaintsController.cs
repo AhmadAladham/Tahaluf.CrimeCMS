@@ -101,5 +101,30 @@ namespace CrimeFile.API.Controllers
             var result = await _complaintService.Delete(id);
             return Ok(result);
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("ComplaintSearch")]
+        public async Task<IActionResult> Search([FromBody] SearchComplaintsDTO searchComplaintsDTO)
+        {
+            var complaints = await _complaintService.Search(searchComplaintsDTO);
+            if (complaints.Data != null)
+            {
+                var metadata = new
+                {
+                    complaints.Data.TotalCount,
+                    complaints.Data.PageSize,
+                    complaints.Data.CurrentPage,
+                    complaints.Data.TotalPages,
+                    complaints.Data.HasNext,
+                    complaints.Data.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            }
+
+            return Ok(complaints);
+        }
     }
 }

@@ -121,5 +121,41 @@ namespace CrimeFile.Infra.Repositories
             var result = await _dbContext.Connection.ExecuteAsync("DeleteComplaint", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
             return result;
         }
+
+
+        public async Task<PagedList<AllComplaintsDTO>> Search(SearchComplaintsDTO searchComplaintsDTO)
+        {
+            queryParameters.Add("@ComplaintTitle", searchComplaintsDTO.ComplaintTitle, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@DateFrom", searchComplaintsDTO.DateFrom, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+            queryParameters.Add("@DateTo", searchComplaintsDTO.DateTo, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+            queryParameters.Add("@CrimeCategoryId", searchComplaintsDTO.CrimeCategoryId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@StationId", searchComplaintsDTO.StationId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@ComplaintStatus", searchComplaintsDTO.ComplaintStatus, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@PageNumber", searchComplaintsDTO.PageNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@RowsOfPage", searchComplaintsDTO.PageSize, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@TotalCount", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+            queryParameters.Add("@SortingCol", searchComplaintsDTO.SortingColumn, dbType: DbType.String, direction: ParameterDirection.Input);
+            queryParameters.Add("@SortType", searchComplaintsDTO.SortType, dbType: DbType.String, direction: ParameterDirection.Input);
+            var result = await _dbContext.Connection.QueryAsync<AllComplaintsDTO, int, Tuple<AllComplaintsDTO, int>>("SearchComplaints"
+               , (searchComplaintsDTO, tCount) =>
+               {
+                   Tuple<AllComplaintsDTO, int> t = new Tuple<AllComplaintsDTO, int>(searchComplaintsDTO, tCount);
+                   return t;
+               }
+               , splitOn: "TotalCount"
+               , transaction: _dbContext.Transaction
+               , param: queryParameters
+               , commandType: CommandType.StoredProcedure);
+
+            var complaints = new List<AllComplaintsDTO>();
+            int totalCount = 0;
+            if (result.Count() > 0) totalCount = result.FirstOrDefault().Item2;
+            foreach (var item in result)
+            {
+                complaints.Add(item.Item1);
+            }
+            var complaintsPagedList = new PagedList<AllComplaintsDTO>(complaints, totalCount, searchComplaintsDTO.PageNumber, searchComplaintsDTO.PageSize);
+            return complaintsPagedList;
+        }
     }
 }
