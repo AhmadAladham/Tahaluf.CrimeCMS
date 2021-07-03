@@ -67,8 +67,8 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [Route("User")]
-        [Permission(Permissions.ViewComplaint)]
-        public async Task<IActionResult> GetComplaintByUserId()
+        [Permission(Permissions.ViewUserComplaints)]
+        public async Task<IActionResult> GetComplaintsByUserId()
         {
             var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
             var token = SecurityUtility.DecodeToken(authorization);
@@ -131,7 +131,6 @@ namespace CrimeFile.API.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             }
-
             return Ok(complaints);
         }
     }

@@ -12,5 +12,6 @@ namespace CrimeFile.Core.Permissions
         public const string EditComplaint = "complaints.complaints_edit";
         public const string DeleteComplaint = "complaints.complaints_delete";
         public const string SearchComplaint = "complaints.complaints_search";
+        public const string ViewUserComplaints = "complaints.complaints_viewusercomplaints";
     }
 }
