@@ -2,8 +2,10 @@
 using CrimeFile.API.Utility;
 using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
+using CrimeFile.Core.Permissions;
 using CrimeFile.Core.Security;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +22,7 @@ namespace CrimeFile.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors]
+    [Authorize]
     public class ComplaintsController : ControllerBase
     {
         private readonly IComplaintService _complaintService;
@@ -33,7 +36,7 @@ namespace CrimeFile.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<AllComplaintsDTO>), StatusCodes.Status200OK)]
-        //[Permission(Permissions.List)]
+        //[Permission(Permissions.ListComplaints)]
         public async Task<IActionResult> GetAll([FromQuery] ComplaintParameter complaintParameter)
         {
             var crimes = await _complaintService.GetAllPaged(complaintParameter);
@@ -54,7 +57,7 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [Route("{id}")]
-        //[Permission(Permissions.List)]
+        [Permission(Permissions.ViewComplaint)]
         public async Task<IActionResult> GetComplaintById(int id)
         {
             var result = await _complaintService.GetById(id);
@@ -64,7 +67,7 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [Route("User")]
-        //[Permission(Permissions.)]
+        [Permission(Permissions.ViewComplaint)]
         public async Task<IActionResult> GetComplaintByUserId()
         {
             var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
@@ -77,6 +80,7 @@ namespace CrimeFile.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Permission(Permissions.AddComplaint)]
         public async Task<IActionResult> Create([FromBody] Complaint complaint)
         {
             var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
@@ -90,6 +94,7 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("ComplaintStatus")]
+        [Permission(Permissions.EditComplaint)]
         public async Task<IActionResult> EditComplaintStatus([FromBody] EditComplaintStatusDTO editComplaintStatusDTO)
         {
             var result = await _complaintService.EditComplaintStatus(editComplaintStatusDTO);
@@ -97,6 +102,7 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Permission(Permissions.DeleteComplaint)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _complaintService.Delete(id);
@@ -107,6 +113,7 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(Complaint), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("ComplaintSearch")]
+        [Permission(Permissions.SearchComplaint)]
         public async Task<IActionResult> Search([FromBody] SearchComplaintsDTO searchComplaintsDTO)
         {
             var complaints = await _complaintService.Search(searchComplaintsDTO);

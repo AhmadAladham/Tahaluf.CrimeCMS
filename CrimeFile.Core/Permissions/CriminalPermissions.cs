@@ -10,6 +10,7 @@ namespace CrimeFile.Core.Permissions
         public const string ViewCriminal = "criminals.criminals_view";
         public const string AddCriminal = "criminals.criminals_add";
         public const string EditCriminal = "criminals.criminals_edit";
+        public const string DeleteCriminal = "criminals.criminals_delete";
     }
     
 }

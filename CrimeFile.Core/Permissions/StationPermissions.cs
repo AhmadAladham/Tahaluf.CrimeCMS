@@ -10,5 +10,6 @@ namespace CrimeFile.Core.Permissions
         public const string ViewStation = "stations.stations_view";
         public const string AddStation = "stations.stations_add";
         public const string EditStation = "stations.stations_edit";
+        public const string DeleteStation = "stations.stations_delete";
     }
 }

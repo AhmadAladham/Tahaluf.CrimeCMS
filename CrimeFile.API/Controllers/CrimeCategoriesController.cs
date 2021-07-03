@@ -1,5 +1,8 @@
-﻿using CrimeFile.Core.Entities;
+﻿using CrimeFile.API.Attributes;
+using CrimeFile.Core.Entities;
+using CrimeFile.Core.Permissions;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +14,7 @@ namespace CrimeFile.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CrimeCategoriesController : ControllerBase
     {
         private readonly ICrimeCategoryService _crimeCategoryService;
@@ -22,7 +26,7 @@ namespace CrimeFile.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<CrimeCategory>), StatusCodes.Status200OK)]
-        //[Permission(Permissions.List)]
+        [Permission(Permissions.ListCrimeCategories)]
         public async Task<IActionResult> GetAll()
         {
             var data = await _crimeCategoryService.GetAll();
@@ -32,7 +36,7 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(CrimeCategory), StatusCodes.Status200OK)]
         [Route("{id}")]
-        //[Permission(Permissions.List)]
+        [Permission(Permissions.ViewCrimeCategory)]
         public async Task<IActionResult> GetStationById(int id)
         {
             var data = await _crimeCategoryService.GetById(id);
@@ -42,6 +46,7 @@ namespace CrimeFile.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(CrimeCategory), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Permission(Permissions.AddCrimeCategory)]
         public async Task<IActionResult> Create([FromBody] CrimeCategory crimeCategory)
         {
             var data = await _crimeCategoryService.Create(crimeCategory);
@@ -51,6 +56,7 @@ namespace CrimeFile.API.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(CrimeCategory), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Permission(Permissions.EditCrimeCategory)]
         public async Task<IActionResult> Edit([FromBody] CrimeCategory crimeCategory)
         {
             var data = await _crimeCategoryService.Edit(crimeCategory);
@@ -58,6 +64,7 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Permission(Permissions.DeleteCrimeCategory)]
         public async Task<IActionResult> Delete(int id)
         {
             var data = await _crimeCategoryService.Delete(id);

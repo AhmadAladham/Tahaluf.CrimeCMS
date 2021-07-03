@@ -1,5 +1,8 @@
-﻿using CrimeFile.Core.Entities;
+﻿using CrimeFile.API.Attributes;
+using CrimeFile.Core.Entities;
+using CrimeFile.Core.Permissions;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +16,7 @@ namespace CrimeFile.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors]
+    [Authorize]
     public class StationsController : ControllerBase
     {
         private readonly IStationService _stationService;
@@ -24,7 +28,7 @@ namespace CrimeFile.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<Station>), StatusCodes.Status200OK)]
-        //[Permission(Permissions.List)]
+        [Permission(Permissions.ListStations)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _stationService.GetAll();
@@ -34,7 +38,7 @@ namespace CrimeFile.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Station), StatusCodes.Status200OK)]
         [Route("{id}")]
-        //[Permission(Permissions.List)]
+        [Permission(Permissions.ViewStation)]
         public async Task<IActionResult> GetStationById(int id)
         {
             var result = await _stationService.GetById(id);
@@ -42,8 +46,8 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpPost]
-        //[ProducesResponseType(typeof(Station), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Permission(Permissions.AddStation)]
         public async Task<IActionResult> Create([FromBody] Station station)
         {
             var result = await _stationService.Create(station);
@@ -53,6 +57,7 @@ namespace CrimeFile.API.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(Station), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Permission(Permissions.EditStation)]
         public async Task<IActionResult> Edit([FromBody] Station station)
         {
             var result = await _stationService.Edit(station);
@@ -60,6 +65,7 @@ namespace CrimeFile.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Permission(Permissions.DeleteStation)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _stationService.Delete(id);

@@ -2,6 +2,7 @@
 using CrimeFile.API.Utility;
 using CrimeFile.Core.DTOs;
 using CrimeFile.Core.Entities;
+using CrimeFile.Core.Permissions;
 using CrimeFile.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -14,9 +15,11 @@ using System.Threading.Tasks;
 
 namespace CrimeFile.API.Controllers
 {
-    [Route("api/[controller]")]// /[action]
+    [Route("api/[controller]")]
     [ApiController]
     [EnableCors]
+    [Authorize]
+    
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -32,6 +35,8 @@ namespace CrimeFile.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(PagedList<UserDTO>), StatusCodes.Status200OK)]
+        [Permission(Permissions.ListUsers)]
+
         public async Task<IActionResult> GetAll([FromQuery] UserParameters userParameters)
         {
             var users = await _userService.GetAllPaged(userParameters);
@@ -54,6 +59,7 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(RegisterResultDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
             var result = await _userService.Register(registerDTO);
@@ -65,6 +71,7 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(GenerateCodeDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("ForgotPassword")]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO forgotPasswordDTO)
         {
             var result = await _userService.ForgotPassword(forgotPasswordDTO);
@@ -76,6 +83,7 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(GenerateCodeDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("ResetPassword")]
+
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDTO)
         {
             var result = await _userService.ResetPassword(resetPasswordDTO);
@@ -110,6 +118,8 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("SignIn")]
+        [AllowAnonymous]
+        
         public async Task<IActionResult> SignIn([FromBody] SignInDTO signInDTO)
         {
             var result = await _userService.SignIn(signInDTO);
@@ -120,6 +130,8 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("Edit")]
+        [Permission(Permissions.EditUser)]
+
         public async Task<IActionResult> Edit([FromBody] EditUserDTO editUserDTO)
         {
             var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
@@ -142,6 +154,7 @@ namespace CrimeFile.API.Controllers
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("UserSearch")]
+        [Permission(Permissions.SearchUser)]
         public async Task<IActionResult> Search([FromBody] SearchUserDTO searchUserDTO)
         {
             var users = await _userService.Search(searchUserDTO);
