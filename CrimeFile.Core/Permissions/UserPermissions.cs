@@ -12,5 +12,6 @@ namespace CrimeFile.Core.Permissions
         public const string EditUser = "users.users_edit";
         public const string DeleteUser = "users.users_delete";
         public const string SearchUser = "users.users_search";
+        public const string ListUserRoles = "users.userroles_list";
     }
 }
