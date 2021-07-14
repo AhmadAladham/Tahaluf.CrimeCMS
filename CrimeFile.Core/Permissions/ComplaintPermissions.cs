@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CrimeFile.Core.Permissions
 {
-    public static partial class Permissions
+    public  partial class Permissions
     {
         public const string ListComplaints = "complaints.complaints_list";
         public const string ViewComplaint = "complaints.complaints_view";

@@ -158,9 +158,12 @@ namespace CrimeFile.Infra.Repositories
             return complaintsPagedList;
         }
 
-        public Task<int> EditComplaintStatus(EditComplaintStatusDTO editComplaintStatusDTO)
+        public async Task<int> EditComplaintStatus(EditComplaintStatusDTO editComplaintStatusDTO)
         {
-            throw new NotImplementedException();
+            queryParameters.Add("@ComplaintId", editComplaintStatusDTO.ComplaintId, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@ComplaintStatus", editComplaintStatusDTO.ComplaintStatus, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            var result = await _dbContext.Connection.ExecuteAsync("EditComplaintStatus", queryParameters, _dbContext.Transaction, commandType: CommandType.StoredProcedure);
+            return result;
         }
     }
 }
