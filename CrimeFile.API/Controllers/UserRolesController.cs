@@ -1,5 +1,8 @@
-﻿using CrimeFile.Core.Entities;
+﻿using CrimeFile.API.Attributes;
+using CrimeFile.Core.Entities;
+using CrimeFile.Core.Permissions;
 using CrimeFile.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +16,7 @@ namespace CrimeFile.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors]
+    
     public class UserRolesController : ControllerBase
     {
         private readonly IUserRoleService _userRoleService;
@@ -24,7 +28,7 @@ namespace CrimeFile.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<UserRole>), StatusCodes.Status200OK)]
-        //[Permission(Permissions.List)]
+        
         public async Task<IActionResult> GetAll()
         {
             var result = await _userRoleService.GetAll();

@@ -126,7 +126,7 @@ namespace CrimeFile.Infra.Repositories
         public async Task<int> Edit(Criminal criminal)
         {
             queryParameters.Add("@CriminalId", criminal.CriminalId, dbType: DbType.Int32, direction: ParameterDirection.Input);
-            queryParameters.Add("@CriminalNationalNumber", criminal.CriminalNationalNumber, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            queryParameters.Add("@CriminalNationalNumber", criminal.CriminalNationalNumber, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@CriminalFirstName", criminal.CriminalFirstName, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@CriminalLastName", criminal.CriminalLastName, dbType: DbType.String, direction: ParameterDirection.Input);
             queryParameters.Add("@Height", criminal.Height, dbType: DbType.Decimal, direction: ParameterDirection.Input);
